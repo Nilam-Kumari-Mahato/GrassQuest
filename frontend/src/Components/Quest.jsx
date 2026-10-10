@@ -1,100 +1,89 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Sparkles, Compass, CheckCircle2, Award, Clock } from 'lucide-react';
+import { ArrowLeft, Sparkles, CheckCircle2, Award, Clock } from 'lucide-react';
 import bgImg from '../assets/bg_img.png';
 
-const QUEST_LIST = [
+import {
+    Coffee,
+    Leaf,
+    Search,
+    Compass,
+    Moon,
+    Sun,
+} from "lucide-react";
+
+export const moods = [
     {
-        id: 'quest_1',
-        stickerId: 'wildflower',
-        title: 'The Wildflower Hunt',
-        category: 'nature',
-        categoryLabel: 'Tiny Nature',
-        difficulty: '3 Mins • Easy',
-        description: 'Step outside and locate 1 wild flower blooming in grass, soil, or even through a crack in the pavement.',
-        rewardSticker: '🌸 Wildflower Sprig',
-        rewardEmoji: '🌸'
+        id: "bored",
+        label: "Bored",
+        description: "Surprise me with something fun",
+        icon: Coffee,
+        color: "#9B613B",
+        bgColor: "#FCE8D7",
     },
     {
-        id: 'quest_2',
-        stickerId: 'cloud',
-        title: 'Cloud Dreamer',
-        category: 'mindful',
-        categoryLabel: 'Mindful Moment',
-        difficulty: '5 Mins • Gentle',
-        description: 'Look up at the open sky for 5 minutes without checking any screen. Find two interesting shapes in the clouds or sky.',
-        rewardSticker: '☁️ Dreamy Cloud',
-        rewardEmoji: '☁️'
+        id: "calm",
+        label: "Calm",
+        description: "Enjoy a peaceful moment",
+        icon: Leaf,
+        color: "#477B3B",
+        bgColor: "#DDECC1",
     },
     {
-        id: 'quest_3',
-        stickerId: 'tree',
-        title: 'Breeze & Bark',
-        category: 'nature',
-        categoryLabel: 'Tiny Nature',
-        difficulty: '3 Mins • Sensory',
-        description: 'Gently place your hand against the rough bark of a living tree. Close your eyes and notice 3 distinct outdoor sounds.',
-        rewardSticker: '🌳 Ancient Bark',
-        rewardEmoji: '🌳'
+        id: "curious",
+        label: "Curious",
+        description: "Discover something new",
+        icon: Search,
+        color: "#426A9A",
+        bgColor: "#E1EDFA",
     },
     {
-        id: 'quest_4',
-        stickerId: 'dewdrop',
-        title: 'Dewdrop Seeker',
-        category: 'explorer',
-        categoryLabel: 'Explorer',
-        difficulty: '4 Mins • Discovery',
-        description: 'Find a cool blade of grass or plant leaf holding water droplets or morning dew. Observe the tiny reflections.',
-        rewardSticker: '💧 Morning Dewdrop',
-        rewardEmoji: '💧'
+        id: "adventurous",
+        label: "Adventurous",
+        description: "Explore the world around me",
+        icon: Compass,
+        color: "#99712D",
+        bgColor: "#F8E4B9",
     },
     {
-        id: 'quest_5',
-        stickerId: 'ladybug',
-        title: 'Little Neighbor',
-        category: 'nature',
-        categoryLabel: 'Tiny Nature',
-        difficulty: '5 Mins • Curious',
-        description: 'Spot a tiny bug, bird, butterfly or neighborhood critter minding its own day. Watch how peaceful it is.',
-        rewardSticker: '🐞 Ladybug Buddy',
-        rewardEmoji: '🐞'
+        id: "tired",
+        label: "Tired",
+        description: "Keep it easy and gentle",
+        icon: Moon,
+        color: "#76609E",
+        bgColor: "#E9E2F5",
     },
     {
-        id: 'quest_6',
-        stickerId: 'mushroom',
-        title: 'Moss Detective',
-        category: 'explorer',
-        categoryLabel: 'Explorer',
-        difficulty: '5 Mins • Discovery',
-        description: 'Seek out soft velvety moss on a stone, sidewalk edge, or tree root in the shade. Notice its vibrant green.',
-        rewardSticker: '🍄 Mossy Mushroom',
-        rewardEmoji: '🍄'
+        id: "happy",
+        label: "Happy",
+        description: "Make this moment even better",
+        icon: Sun,
+        color: "#BB626A",
+        bgColor: "#F8DDE0",
     },
-    {
-        id: 'quest_7',
-        stickerId: 'sunbeam',
-        title: 'Sun Salutation',
-        category: 'mindful',
-        categoryLabel: 'Mindful Moment',
-        difficulty: '4 Mins • Warmth',
-        description: 'Stand or sit in a warm patch of sunlight for 4 minutes. Take 5 deep breaths of fresh outdoor air.',
-        rewardSticker: '☀️ Golden Sunbeam',
-        rewardEmoji: '☀️'
-    }
 ];
+
+
+
+const interests = [
+    'Star gazing',
+    'Plants and Flowers',
+    'Bird & Butterflies',
+    'Nature Photography',
+    'Walking Exploring',
+    'Peaceful Moments'
+]
+
 
 export default function Quest({ onNavigate, completedQuests = [], onCompleteQuest }) {
     const [filter, setFilter] = useState('all');
-    const [rewardModal, setRewardModal] = useState(null);
+    const [mood, setMood] = useState('null')
+    const [duration, setDuration] = useState('');
+    const [interest, setInterest] = useState('');
+    const [environment, setEnvironment] = useState('');
 
-    const filteredQuests = filter === 'all'
-        ? QUEST_LIST
-        : QUEST_LIST.filter(q => q.category === filter);
 
-    const handleFinishQuest = (quest) => {
-        if (completedQuests.includes(quest.id)) return;
-        onCompleteQuest(quest.id, quest.stickerId);
-        setRewardModal(quest);
-    };
+
+
 
     return (
         <div
@@ -126,120 +115,47 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
                             Tiny Outdoor quest little momment of wonder
                         </p>
                     </div>
-
-                    <div className="stat-pill" style={{ background: 'rgba(235, 246, 228, 0.95)' }}>
-                        <div className="stat-num">{completedQuests.length} / {QUEST_LIST.length}</div>
-                        <div className="stat-label">Quests Completed</div>
-                    </div>
                 </div>
 
-                {/* Category Filters */}
-                <div className="quest-filter-bar">
-                    <button
-                        className={`quest-filter-chip ${filter === 'all' ? 'active' : ''}`}
-                        onClick={() => setFilter('all')}
-                    >
-                        All Quests ({QUEST_LIST.length})
-                    </button>
-                    <button
-                        className={`quest-filter-chip ${filter === 'nature' ? 'active' : ''}`}
-                        onClick={() => setFilter('nature')}
-                    >
-                        🌱 Tiny Nature
-                    </button>
-                    <button
-                        className={`quest-filter-chip ${filter === 'mindful' ? 'active' : ''}`}
-                        onClick={() => setFilter('mindful')}
-                    >
-                        ☀️ Mindful Moments
-                    </button>
-                    <button
-                        className={`quest-filter-chip ${filter === 'explorer' ? 'active' : ''}`}
-                        onClick={() => setFilter('explorer')}
-                    >
-                        🧭 Explorer
-                    </button>
-                </div>
 
-                {/* Quests Grid */}
-                <div className="quests-grid">
-                    {filteredQuests.map((quest) => {
-                        const isCompleted = completedQuests.includes(quest.id);
+                <div>
+                    <div className="mood">
+                        <p>Choose your mood</p>
+                        {moods.map((m) => {
+                            const icon = m.icon;
+                            const isSelected = m.id;
 
-                        return (
-                            <div
-                                key={quest.id}
-                                className={`quest-card ${isCompleted ? 'completed' : ''}`}
+                            <button
+                                key={m.id}
+                                type='button'
+                                onClick={setMood(m.id)}
+                                aria-pressed={isSelected}
+
                             >
-                                <div className="quest-card-top">
-                                    <div className="quest-icon-badge">
-                                        {quest.rewardEmoji}
-                                    </div>
-                                    <div className="quest-title-wrap">
-                                        <span className="quest-difficulty">{quest.difficulty}</span>
-                                        <h3 className="quest-title">{quest.title}</h3>
-                                    </div>
-                                </div>
-
-                                <p className="quest-description">{quest.description}</p>
-
-                                <div className="quest-reward-row">
-                                    <span className="quest-reward-label">
-                                        <Award size={16} />
-                                        <span>Reward:</span>
-                                    </span>
-                                    <span className="quest-reward-sticker">{quest.rewardSticker}</span>
-                                </div>
-
-                                {isCompleted ? (
-                                    <button className="quest-action-btn completed" disabled>
-                                        <CheckCircle2 size={18} />
-                                        <span>Completed • Sticker in Journal!</span>
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="quest-action-btn start"
-                                        onClick={() => handleFinishQuest(quest)}
-                                    >
-                                        <Sparkles size={18} />
-                                        <span>Complete Quest & Collect</span>
-                                    </button>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
-
-                {/* Modal Celebration */}
-                {rewardModal && (
-                    <div className="reward-modal-overlay" onClick={() => setRewardModal(null)}>
-                        <div className="reward-modal" onClick={e => e.stopPropagation()}>
-                            <div className="reward-icon-burst">
-                                {rewardModal.rewardEmoji}
-                            </div>
-                            <h2 className="reward-modal-title">Quest Accomplished!</h2>
-                            <p className="reward-modal-text">
-                                You took a tiny moment outside and earned the <strong>{rewardModal.rewardSticker}</strong> sticker for your journal!
-                            </p>
-
-                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-                                <button
-                                    className="reward-modal-btn"
-                                    onClick={() => onNavigate('journal')}
-                                >
-                                    View in Sticker Journal
-                                </button>
-                                <button
-                                    className="reward-modal-btn"
-                                    style={{ background: '#7ba85a' }}
-                                    onClick={() => setRewardModal(null)}
-                                >
-                                    More Quests
-                                </button>
-                            </div>
-                        </div>
+                                {m.label}
+                            </button>
+                        })}
                     </div>
-                )}
+                    <div onChange={(e) => setDuration(e.target.value)}>
+                        <label>Duration: </label>
+                        <input type="number" />
+                    </div>
+                    <div className='inerest' onChange={(e) => setInterest(e.target.value)}>
+                        <p>What would you love to explore ?</p>
+                        {interests.map((i) => (
+                            <div className='ith_iterest' id={i}>{i}</div>
+                        ))}
+
+                        <label>Or tell us something else:</label>
+                        <input type="text" name="interest" />
+                    </div>
+
+                    <div className="environment" onChange={setEnvironment}>
+                        <p>Describe the environment : </p>
+                        <input type="text" name="environment" id="env" />
+                    </div>
+
+                </div>
             </div>
         </div>
     );

@@ -3,12 +3,11 @@ import Navbar from './Components/Navbar';
 import Hero from './Components/Hero';
 import Journal from './Components/Journal';
 import Quest from './Components/Quest';
-import './App.css';
 
 function App() {
   const [activePage, setActivePage] = useState('home'); // 'home' | 'journal' | 'quest'
 
-  // Persistent sticker album state
+  // Persistent sticker album state (starts with lucky clover)
   const [unlockedStickers, setUnlockedStickers] = useState(() => {
     try {
       const saved = localStorage.getItem('grassquest_stickers');
@@ -54,11 +53,11 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className="min-h-screen w-full flex flex-col relative font-body bg-[#FFF9E9] text-forest">
       {/* Persistent floating glass navbar */}
       <Navbar activePage={activePage} setActivePage={setActivePage} />
 
-      <main>
+      <main className="flex-1 w-full flex flex-col">
         {activePage === 'home' && (
           <Hero
             onStartQuest={() => setActivePage('quest')}
@@ -78,6 +77,7 @@ function App() {
           <Quest
             onNavigate={setActivePage}
             completedQuests={completedQuests}
+            unlockedStickers={unlockedStickers}
             onCompleteQuest={handleCompleteQuest}
           />
         )}

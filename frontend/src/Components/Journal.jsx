@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, BookOpen, Sparkles, PlusCircle, CheckCircle2, Lock, Smile, Calendar, MapPin } from 'lucide-react';
+import { ArrowLeft, BookOpen, Sparkles, Lock } from 'lucide-react';
 import bgImg from '../assets/bg_img.png';
 
 const ALL_STICKERS = [
@@ -66,6 +66,22 @@ const ALL_STICKERS = [
         category: 'Sky',
         description: 'Basked in warm midday natural sunlight to rejuvenate the wandering soul.',
         questId: 'quest_7'
+    },
+    {
+        id: 'butterfly',
+        name: 'Flutter Butterfly',
+        emoji: '🦋',
+        category: 'Fauna',
+        description: 'Danced along with gentle wings fluttering across dandelion blossoms.',
+        questId: 'quest_8'
+    },
+    {
+        id: 'rainbow',
+        name: 'Sky Meadow',
+        emoji: '🌈',
+        category: 'Sky',
+        description: 'Caught the magic of colors arching above a quiet rainy horizon.',
+        questId: 'quest_9'
     }
 ];
 
@@ -108,58 +124,60 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
 
     return (
         <div
-            className="page-view-container"
+            className="min-h-screen w-full pt-24 pb-16 relative bg-cover bg-bottom bg-no-repeat flex flex-col"
             style={{ backgroundImage: `url(${bgImg})` }}
         >
-            <div className="page-inner-content">
+            <div className="max-w-[1140px] w-[92%] mx-auto relative z-10">
                 {/* Top Navigation Row */}
-                <div className="page-top-header">
+                <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
                     <button
-                        className="back-home-btn"
+                        className="inline-flex items-center gap-2 py-2 px-5 bg-white/85 backdrop-blur-sm border-[1.5px] border-white/90 rounded-full font-rounded text-[0.95rem] font-semibold text-forest shadow-sm hover:bg-white hover:-translate-x-1 transition-all duration-200 cursor-pointer"
                         onClick={() => onNavigate('home')}
                     >
                         <ArrowLeft size={18} />
                         <span>Back to Home</span>
                     </button>
 
-                    <div className="page-title-badge">
+                    <div className="inline-flex items-center gap-2 bg-[#EBF6E4]/85 backdrop-blur-md py-1.5 px-4.5 rounded-full border border-white/80 font-rounded text-sm font-bold text-forest">
                         <BookOpen size={16} />
                         <span>Field Scrapbook & Stickers</span>
                     </div>
                 </div>
 
                 {/* Journal Banner */}
-                <div className="journal-hero-banner">
+                <div className="bg-white/85 backdrop-blur-md border-[1.5px] border-white/90 rounded-[28px] p-7 sm:p-8 mb-7 shadow-soft-card flex justify-between items-center flex-wrap gap-5">
                     <div>
-                        <h1 className="journal-title">My Sticker Journal</h1>
-                        <p className="journal-subtitle">
+                        <h1 className="font-hero text-4xl sm:text-5xl text-forest leading-tight mb-1.5">My Sticker Journal</h1>
+                        <p className="font-quote text-xl sm:text-2xl text-forest/75">
                             Collect wild stickers by stepping outdoors into the sunlight
                         </p>
                     </div>
 
-                    <div className="journal-stats">
-                        <div className="stat-pill">
-                            <div className="stat-num">{unlockedCount} / {ALL_STICKERS.length}</div>
-                            <div className="stat-label">Stickers Found</div>
+                    <div className="flex gap-4">
+                        <div className="bg-[#EBF6E4]/90 border border-clover/30 py-2.5 px-5 rounded-[20px] text-center">
+                            <div className="font-hero text-3xl font-bold text-clover leading-none">{unlockedCount} / {ALL_STICKERS.length}</div>
+                            <div className="font-rounded text-xs text-forest font-semibold mt-1">Stickers Found</div>
                         </div>
-                        <div className="stat-pill">
-                            <div className="stat-num">{completedQuests.length}</div>
-                            <div className="stat-label">Quests Done</div>
+                        <div className="bg-[#EBF6E4]/90 border border-clover/30 py-2.5 px-5 rounded-[20px] text-center">
+                            <div className="font-hero text-3xl font-bold text-clover leading-none">{completedQuests.length}</div>
+                            <div className="font-rounded text-xs text-forest font-semibold mt-1">Quests Done</div>
                         </div>
                     </div>
                 </div>
 
                 {/* Tab Selection */}
-                <div className="journal-nav-tabs">
+                <div className="flex gap-3 mb-6">
                     <button
-                        className={`tab-btn ${activeTab === 'stickers' ? 'active' : ''}`}
+                        className={`py-2.5 px-6 rounded-full border-[1.5px] border-white/85 bg-white/75 font-rounded text-base font-bold text-forest cursor-pointer transition-all duration-200 flex items-center gap-2 hover:bg-white ${activeTab === 'stickers' ? '!bg-clover !text-white !border-clover shadow-botanical' : ''
+                            }`}
                         onClick={() => setActiveTab('stickers')}
                     >
                         <Sparkles size={18} />
                         <span>Sticker Album ({unlockedCount})</span>
                     </button>
                     <button
-                        className={`tab-btn ${activeTab === 'notes' ? 'active' : ''}`}
+                        className={`py-2.5 px-6 rounded-full border-[1.5px] border-white/85 bg-white/75 font-rounded text-base font-bold text-forest cursor-pointer transition-all duration-200 flex items-center gap-2 hover:bg-white ${activeTab === 'notes' ? '!bg-clover !text-white !border-clover shadow-botanical' : ''
+                            }`}
                         onClick={() => setActiveTab('notes')}
                     >
                         <BookOpen size={18} />
@@ -170,23 +188,25 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
                 {/* TAB 1: Sticker Album */}
                 {activeTab === 'stickers' && (
                     <div>
-                        <div className="sticker-grid">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mb-10">
                             {ALL_STICKERS.map((sticker) => {
                                 const isUnlocked = unlockedStickers.includes(sticker.id);
 
                                 return (
                                     <div
                                         key={sticker.id}
-                                        className={`sticker-card ${isUnlocked ? 'unlocked' : 'locked'}`}
+                                        className={`bg-white/85 backdrop-blur-sm border-[1.5px] border-white/95 rounded-[24px] p-5 text-center shadow-soft-card cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-float flex flex-col items-center relative group ${isUnlocked ? '' : 'opacity-65 bg-[#F0F4EE]/70 border-dashed'
+                                            }`}
                                         onClick={() => setSelectedSticker(sticker)}
                                     >
-                                        <div className="sticker-badge-icon">
-                                            {isUnlocked ? sticker.emoji : <Lock size={28} color="#8a9e80" />}
+                                        <div className="w-20 h-20 rounded-full bg-[#F4FAEE] flex items-center justify-center text-4xl mb-3 shadow-inner group-hover:rotate-6 group-hover:scale-105 transition-transform duration-300">
+                                            {isUnlocked ? sticker.emoji : <Lock size={28} className="text-[#8a9e80]" />}
                                         </div>
-                                        <h3 className="sticker-name">{sticker.name}</h3>
-                                        <span className="sticker-category">{sticker.category}</span>
-                                        <span className="sticker-tag">
-                                            {isUnlocked ? 'Collected' : 'Complete Quest to Unlock'}
+                                        <h3 className="font-hero text-2xl text-forest mb-0.5">{sticker.name}</h3>
+                                        <span className="font-rounded text-[0.78rem] text-forest/65 font-semibold uppercase tracking-wider">{sticker.category}</span>
+                                        <span className={`mt-2 py-1 px-2.5 rounded-full text-xs font-bold ${isUnlocked ? 'bg-sage-light text-forest' : 'bg-gray-100 text-gray-500'
+                                            }`}>
+                                            {isUnlocked ? 'Collected' : 'Locked'}
                                         </span>
                                     </div>
                                 );
@@ -195,34 +215,35 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
 
                         {/* Sticker Detail Modal */}
                         {selectedSticker && (
-                            <div className="reward-modal-overlay" onClick={() => setSelectedSticker(null)}>
-                                <div className="reward-modal" onClick={e => e.stopPropagation()}>
-                                    <div className="reward-icon-burst">
+                            <div className="fixed inset-0 bg-forest/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedSticker(null)}>
+                                <div className="bg-white rounded-[32px] p-8 sm:p-9 max-w-[420px] w-full text-center border-4 border-[#BCE19D] shadow-2xl animate-fadeIn" onClick={e => e.stopPropagation()}>
+                                    <div className="text-6xl mb-3 animate-bounce">
                                         {unlockedStickers.includes(selectedSticker.id) ? selectedSticker.emoji : '🔒'}
                                     </div>
-                                    <h2 className="reward-modal-title">{selectedSticker.name}</h2>
-                                    <p className="reward-modal-text">
+                                    <h2 className="font-hero text-3xl sm:text-4xl text-forest mb-2">{selectedSticker.name}</h2>
+                                    <p className="font-body text-base text-forest/75 mb-6">
                                         {unlockedStickers.includes(selectedSticker.id)
                                             ? selectedSticker.description
                                             : 'This sticker is locked in nature! Complete outdoor quests to discover it.'}
                                     </p>
 
-                                    {!unlockedStickers.includes(selectedSticker.id) && (
-                                        <button
-                                            className="reward-modal-btn"
-                                            style={{ marginRight: '10px' }}
-                                            onClick={() => onNavigate('quest')}
-                                        >
-                                            Find in Quests
-                                        </button>
-                                    )}
+                                    <div className="flex justify-center gap-3">
+                                        {!unlockedStickers.includes(selectedSticker.id) && (
+                                            <button
+                                                className="py-2.5 px-6 rounded-full bg-clover text-white font-hero text-xl cursor-pointer shadow-botanical hover:bg-clover-dark transition-all"
+                                                onClick={() => onNavigate('quest')}
+                                            >
+                                                Find in Quests
+                                            </button>
+                                        )}
 
-                                    <button
-                                        className="reward-modal-btn"
-                                        onClick={() => setSelectedSticker(null)}
-                                    >
-                                        Close
-                                    </button>
+                                        <button
+                                            className="py-2.5 px-6 rounded-full bg-forest text-white font-hero text-xl cursor-pointer hover:bg-forest-deep transition-all"
+                                            onClick={() => setSelectedSticker(null)}
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         )}
@@ -231,15 +252,15 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
 
                 {/* TAB 2: Notes & Memories */}
                 {activeTab === 'notes' && (
-                    <div className="journal-entries-container">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
                         {/* Form */}
-                        <form className="entry-form-card" onSubmit={handleAddNote}>
-                            <h2 className="entry-form-title">Log a Nature Moment</h2>
+                        <form className="bg-white/90 backdrop-blur-md rounded-[28px] p-7 border-[1.5px] border-white/95 shadow-soft-card" onSubmit={handleAddNote}>
+                            <h2 className="font-hero text-3xl text-forest mb-4">Log a Nature Moment</h2>
 
                             <input
                                 type="text"
                                 placeholder="Title (e.g., Morning Walk under the Oaks)"
-                                className="entry-input"
+                                className="w-full p-3 px-4 rounded-2xl border-[1.5px] border-[#D4E5C7] bg-[#FBFDF9] font-body text-[0.95rem] text-forest mb-3.5 outline-none focus:border-clover focus:bg-white transition-colors"
                                 value={newTitle}
                                 onChange={(e) => setNewTitle(e.target.value)}
                                 required
@@ -247,17 +268,17 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
 
                             <textarea
                                 placeholder="What did you smell, see, touch or hear outside today?"
-                                className="entry-textarea"
+                                className="w-full p-3 px-4 rounded-2xl border-[1.5px] border-[#D4E5C7] bg-[#FBFDF9] font-body text-[0.95rem] text-forest mb-3.5 outline-none focus:border-clover focus:bg-white transition-colors min-h-[110px] resize-y"
                                 value={newText}
                                 onChange={(e) => setNewText(e.target.value)}
                                 required
                             />
 
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#38522e', marginBottom: '8px' }}>
+                            <label className="block text-sm font-semibold text-forest mb-2">
                                 Stamp with a Collected Sticker:
                             </label>
                             <select
-                                className="entry-select"
+                                className="w-full p-3 px-4 rounded-2xl border-[1.5px] border-[#D4E5C7] bg-[#FBFDF9] font-body text-[0.95rem] text-forest mb-4 outline-none focus:border-clover focus:bg-white transition-colors"
                                 value={selectedStickerForNote}
                                 onChange={(e) => setSelectedStickerForNote(e.target.value)}
                             >
@@ -270,22 +291,22 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
                                     ))}
                             </select>
 
-                            <button type="submit" className="submit-entry-btn">
+                            <button type="submit" className="w-full py-3 rounded-full bg-clover text-white font-hero text-2xl border-0 cursor-pointer shadow-botanical hover:bg-clover-dark hover:-translate-y-0.5 transition-all">
                                 Save to Journal
                             </button>
                         </form>
 
                         {/* List */}
-                        <div className="entries-list">
+                        <div className="flex flex-col gap-4">
                             {notes.map((note) => (
-                                <div key={note.id} className="entry-card">
-                                    <div className="entry-card-header">
-                                        <h3 className="entry-card-title">
+                                <div key={note.id} className="bg-white/90 backdrop-blur-sm rounded-[22px] p-5 px-6 border-[1.5px] border-white/90 shadow-sm">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <h3 className="font-hero text-2xl text-forest">
                                             {note.stickerEmoji} {note.title}
                                         </h3>
-                                        <span className="entry-card-date">{note.date}</span>
+                                        <span className="text-xs text-forest/60 font-semibold">{note.date}</span>
                                     </div>
-                                    <p className="entry-card-text">{note.text}</p>
+                                    <p className="font-quote text-2xl leading-snug text-forest/90">{note.text}</p>
                                 </div>
                             ))}
                         </div>
