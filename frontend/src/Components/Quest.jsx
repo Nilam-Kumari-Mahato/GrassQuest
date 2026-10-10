@@ -97,7 +97,7 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
                                         type="button"
                                         onClick={() => setMood(m.id)}
                                         aria-pressed={isSelected}
-                                        className={`w-40 h-15 flex items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-200 ${isSelected
+                                        className={`w-40 h-15 flex items-center gap-4 rounded-2xl border p-2 text-left transition-all duration-200 ${isSelected
                                             ? "border-green-700 bg-lime-100 shadow-md"
                                             : "border-green-100 bg-white hover:border-green-400 hover:bg-green-50"
                                             }`}
@@ -142,7 +142,7 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
                     {/**  Interest Section  */}
                     <section className='flex flex-col justify-center items-center px-4 mt-2' >
                         <div className="mb-4">
-                            <div className="mb-2 flex items-center gap-2">
+                            <div className=" flex items-center gap-2">
                                 <Clover className="text-green-700" size={22} />
 
                                 <h2 className="text-xl font-bold text-[#214326ff] font-hero">
@@ -167,7 +167,7 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
                                         type="button"
                                         onClick={() => toggleInterest(interest.id)}
                                         aria-pressed={isSelected}
-                                        className={`h-20 w-50 flex items-center gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${isSelected
+                                        className={`h-20 w-50 flex items-center gap-3 rounded-2xl border p-2 text-left transition-all duration-200 ${isSelected
                                             ? "border-green-700 bg-lime-100 shadow-sm"
                                             : "border-green-100 bg-[#FFFDF7] hover:border-green-400"
                                             }`}
@@ -190,35 +190,10 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
                                 );
                             })}
                         </div>
-
-
-
-                        <div>
-                            <label
-                                htmlFor="custom-interest"
-                                className="block font-medium text-green-950"
-                            >
-                                Or tell us something else
-                                <span className="ml-2 text-sm font-normal text-gray-500">
-                                    (optional)
-                                </span>
-                            </label>
-
-                            <input
-                                id="custom-interest"
-                                type="text"
-                                name="customInterest"
-                                value={customInterest}
-                                onChange={(e) => setCustomInterest(e.target.value)}
-                                maxLength={80}
-                                placeholder="e.g. Find interesting patterns in leaves..."
-                                className="w-full rounded-xl border border-green-200 bg-[#FFFDF7] px-4 py-3 outline-none transition focus:border-green-600 focus:ring-2 focus:ring-green-100"
-                            />
-                        </div>
                     </section>
 
                     {/**Environment */}
-                    <section className="rounded-3xl ">
+                    <section className="rounded-3xl flex flex-col justify-center items-center">
                         <div >
                             <div className="mb-2 flex items-center gap-2">
                                 <Clover size={22} className="text-green-700" />
@@ -245,7 +220,7 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
                                         type="button"
                                         onClick={() => setEnvironment(item.id)}
                                         aria-pressed={isSelected}
-                                        className={`relative flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 hover:-translate-y-0.5 ${isSelected
+                                        className={`relative flex items-start gap-3 rounded-2xl border p-2 text-left transition-all duration-200 hover:-translate-y-0.5 ${isSelected
                                             ? "border-green-700 bg-lime-100 shadow-sm"
                                             : "border-green-100 bg-[#FFFDF7] hover:border-green-400"
                                             }`}
