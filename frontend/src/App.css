@@ -1,4 +1,10 @@
 /* App Layout */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid #315c3a;
+  outline-offset: 3px;
+}
+
 .app-container {
   min-height: 100vh;
   width: 100%;

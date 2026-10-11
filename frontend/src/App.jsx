@@ -1,55 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './Components/Navbar';
 import Hero from './Components/Hero';
 import Journal from './Components/Journal';
 import Quest from './Components/Quest';
+import { stickers } from './data/stickers';
+import { JOURNAL_STORAGE_KEY, loadJournalState, recordQuestCompletion } from './utils/journal';
 
 function App() {
   const [activePage, setActivePage] = useState('home'); // 'home' | 'journal' | 'quest'
-
-  // Persistent sticker album state (starts with lucky clover)
-  const [unlockedStickers, setUnlockedStickers] = useState(() => {
+  const [activeQuest, setActiveQuest] = useState(null);
+  const [journal, setJournal] = useState(() => {
     try {
-      const saved = localStorage.getItem('grassquest_stickers');
-      return saved ? JSON.parse(saved) : ['clover'];
+      return loadJournalState(window.localStorage, stickers);
     } catch {
-      return ['clover'];
+      return { unlockedStickerIds: [], completedQuests: [] };
     }
   });
-
-  // Persistent completed quests state
-  const [completedQuests, setCompletedQuests] = useState(() => {
-    try {
-      const saved = localStorage.getItem('grassquest_completed_quests');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const journalRef = useRef(journal);
 
   useEffect(() => {
     try {
-      localStorage.setItem('grassquest_stickers', JSON.stringify(unlockedStickers));
-    } catch (e) {
-      console.error(e);
+      window.localStorage.setItem(JOURNAL_STORAGE_KEY, JSON.stringify(journal));
+    } catch {
+      // Browser storage can be disabled; the current session still works.
     }
-  }, [unlockedStickers]);
+  }, [journal]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('grassquest_completed_quests', JSON.stringify(completedQuests));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [completedQuests]);
-
-  const handleCompleteQuest = (questId, stickerId) => {
-    if (!completedQuests.includes(questId)) {
-      setCompletedQuests((prev) => [...prev, questId]);
-    }
-    if (stickerId && !unlockedStickers.includes(stickerId)) {
-      setUnlockedStickers((prev) => [...prev, stickerId]);
-    }
+  const handleCompleteQuest = (quest) => {
+    const completion = recordQuestCompletion(journalRef.current, quest, stickers);
+    journalRef.current = completion.state;
+    setJournal(completion.state);
+    return completion.result;
   };
 
   return (
@@ -68,17 +49,18 @@ function App() {
         {activePage === 'journal' && (
           <Journal
             onNavigate={setActivePage}
-            unlockedStickers={unlockedStickers}
-            completedQuests={completedQuests}
+            unlockedStickers={journal.unlockedStickerIds}
+            completedQuests={journal.completedQuests}
           />
         )}
 
         {activePage === 'quest' && (
           <Quest
             onNavigate={setActivePage}
-            completedQuests={completedQuests}
-            unlockedStickers={unlockedStickers}
+            completedQuests={journal.completedQuests}
             onCompleteQuest={handleCompleteQuest}
+            currentQuest={activeQuest}
+            onQuestChange={setActiveQuest}
           />
         )}
       </main>

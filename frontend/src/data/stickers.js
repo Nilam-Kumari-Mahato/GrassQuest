@@ -2,7 +2,7 @@ import slowExplorer from "../assets/sticker_pack/slow_Explorer.png";
 import sleepyCat from "../assets/sticker_pack/sleepy_cat.png";
 import forestBuddy from "../assets/sticker_pack/forest_buddy.png";
 import flutterFriend from "../assets/sticker_pack/flutter_friend.png";
-import cameraClick from "../assets/sticker_pack/Camera_click.png";
+import cameraClick from "../assets/sticker_pack/Camera_Click.png";
 import sunflowerBuddy from "../assets/sticker_pack/sunflower_buddy.png";
 import natureSinger from "../assets/sticker_pack/nature_singer.png";
 import friendFroggy from "../assets/sticker_pack/friend_froggy.png";
