@@ -1,104 +1,12 @@
 import React, { useState } from 'react';
 import { ArrowLeft, BookOpen, Sparkles, Lock } from 'lucide-react';
 import bgImg from '../assets/bg_img.png';
+import { stickers } from '../data/stickers';
 
-const ALL_STICKERS = [
-    {
-        id: 'clover',
-        name: 'Lucky Four-Leaf',
-        emoji: '🍀',
-        category: 'Flora',
-        description: 'Found nestled in a soft clover patch. Brings quiet luck to every outdoor step.',
-        unlockedAt: 'Gift from Clover Pet'
-    },
-    {
-        id: 'wildflower',
-        name: 'Wildflower Sprig',
-        emoji: '🌸',
-        category: 'Flora',
-        description: 'A vibrant blossom discovered smiling in an unexpected roadside meadow.',
-        questId: 'quest_1'
-    },
-    {
-        id: 'cloud',
-        name: 'Dreamy Cloud',
-        emoji: '☁️',
-        category: 'Sky',
-        description: 'Earned by pausing for five minutes to watch the soft drifting clouds.',
-        questId: 'quest_2'
-    },
-    {
-        id: 'tree',
-        name: 'Ancient Bark',
-        emoji: '🌳',
-        category: 'Flora',
-        description: 'Touched the textured wood of a tall tree and listened to rustling leaves.',
-        questId: 'quest_3'
-    },
-    {
-        id: 'dewdrop',
-        name: 'Morning Dewdrop',
-        emoji: '💧',
-        category: 'Atmosphere',
-        description: 'Caught a shimmering miniature prism resting on a cool morning blade of grass.',
-        questId: 'quest_4'
-    },
-    {
-        id: 'ladybug',
-        name: 'Ladybug Buddy',
-        emoji: '🐞',
-        category: 'Fauna',
-        description: 'Quietly observed a little spotted wanderer taking its afternoon stroll.',
-        questId: 'quest_5'
-    },
-    {
-        id: 'mushroom',
-        name: 'Mossy Mushroom',
-        emoji: '🍄',
-        category: 'Forest',
-        description: 'Discovered near damp wood after the morning mist settled down.',
-        questId: 'quest_6'
-    },
-    {
-        id: 'sunbeam',
-        name: 'Golden Sunbeam',
-        emoji: '☀️',
-        category: 'Sky',
-        description: 'Basked in warm midday natural sunlight to rejuvenate the wandering soul.',
-        questId: 'quest_7'
-    },
-    {
-        id: 'butterfly',
-        name: 'Flutter Butterfly',
-        emoji: '🦋',
-        category: 'Fauna',
-        description: 'Danced along with gentle wings fluttering across dandelion blossoms.',
-        questId: 'quest_8'
-    },
-    {
-        id: 'rainbow',
-        name: 'Sky Meadow',
-        emoji: '🌈',
-        category: 'Sky',
-        description: 'Caught the magic of colors arching above a quiet rainy horizon.',
-        questId: 'quest_9'
-    }
-];
 
 export default function Journal({ onNavigate, unlockedStickers = ['clover'], completedQuests = [] }) {
     const [activeTab, setActiveTab] = useState('stickers'); // 'stickers' | 'notes'
     const [selectedSticker, setSelectedSticker] = useState(null);
-
-    // Field Notes State
-    const [notes, setNotes] = useState([
-        {
-            id: 1,
-            title: 'First Step into the Sunlight',
-            text: 'Put my phone down for 15 minutes today. Walked through the neighborhood park and noticed tiny daisies blooming between sidewalk pavers.',
-            date: 'Today, 10:45 AM',
-            stickerEmoji: '🍀'
-        }
-    ]);
     const [newTitle, setNewTitle] = useState('');
     const [newText, setNewText] = useState('');
     const [selectedStickerForNote, setSelectedStickerForNote] = useState('🍀');
@@ -120,7 +28,7 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
         setNewText('');
     };
 
-    const unlockedCount = ALL_STICKERS.filter(s => unlockedStickers.includes(s.id)).length;
+    const unlockedCount = stickers.filter(s => unlockedStickers.includes(s.id)).length;
 
     return (
         <div
@@ -155,12 +63,8 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
 
                     <div className="flex gap-4">
                         <div className="bg-[#EBF6E4]/90 border border-clover/30 py-2.5 px-5 rounded-[20px] text-center">
-                            <div className="font-hero text-3xl font-bold text-clover leading-none">{unlockedCount} / {ALL_STICKERS.length}</div>
+                            <div className="font-hero text-3xl font-bold text-clover leading-none">{unlockedCount} / {stickers.length}</div>
                             <div className="font-rounded text-xs text-forest font-semibold mt-1">Stickers Found</div>
-                        </div>
-                        <div className="bg-[#EBF6E4]/90 border border-clover/30 py-2.5 px-5 rounded-[20px] text-center">
-                            <div className="font-hero text-3xl font-bold text-clover leading-none">{completedQuests.length}</div>
-                            <div className="font-rounded text-xs text-forest font-semibold mt-1">Quests Done</div>
                         </div>
                     </div>
                 </div>
@@ -175,21 +79,14 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
                         <Sparkles size={18} />
                         <span>Sticker Album ({unlockedCount})</span>
                     </button>
-                    <button
-                        className={`py-2.5 px-6 rounded-full border-[1.5px] border-white/85 bg-white/75 font-rounded text-base font-bold text-forest cursor-pointer transition-all duration-200 flex items-center gap-2 hover:bg-white ${activeTab === 'notes' ? '!bg-clover !text-white !border-clover shadow-botanical' : ''
-                            }`}
-                        onClick={() => setActiveTab('notes')}
-                    >
-                        <BookOpen size={18} />
-                        <span>Outdoor Memories ({notes.length})</span>
-                    </button>
+
                 </div>
 
                 {/* TAB 1: Sticker Album */}
                 {activeTab === 'stickers' && (
                     <div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mb-10">
-                            {ALL_STICKERS.map((sticker) => {
+                            {stickers.map((sticker) => {
                                 const isUnlocked = unlockedStickers.includes(sticker.id);
 
                                 return (
@@ -250,68 +147,7 @@ export default function Journal({ onNavigate, unlockedStickers = ['clover'], com
                     </div>
                 )}
 
-                {/* TAB 2: Notes & Memories */}
-                {activeTab === 'notes' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-                        {/* Form */}
-                        <form className="bg-white/90 backdrop-blur-md rounded-[28px] p-7 border-[1.5px] border-white/95 shadow-soft-card" onSubmit={handleAddNote}>
-                            <h2 className="font-hero text-3xl text-forest mb-4">Log a Nature Moment</h2>
 
-                            <input
-                                type="text"
-                                placeholder="Title (e.g., Morning Walk under the Oaks)"
-                                className="w-full p-3 px-4 rounded-2xl border-[1.5px] border-[#D4E5C7] bg-[#FBFDF9] font-body text-[0.95rem] text-forest mb-3.5 outline-none focus:border-clover focus:bg-white transition-colors"
-                                value={newTitle}
-                                onChange={(e) => setNewTitle(e.target.value)}
-                                required
-                            />
-
-                            <textarea
-                                placeholder="What did you smell, see, touch or hear outside today?"
-                                className="w-full p-3 px-4 rounded-2xl border-[1.5px] border-[#D4E5C7] bg-[#FBFDF9] font-body text-[0.95rem] text-forest mb-3.5 outline-none focus:border-clover focus:bg-white transition-colors min-h-[110px] resize-y"
-                                value={newText}
-                                onChange={(e) => setNewText(e.target.value)}
-                                required
-                            />
-
-                            <label className="block text-sm font-semibold text-forest mb-2">
-                                Stamp with a Collected Sticker:
-                            </label>
-                            <select
-                                className="w-full p-3 px-4 rounded-2xl border-[1.5px] border-[#D4E5C7] bg-[#FBFDF9] font-body text-[0.95rem] text-forest mb-4 outline-none focus:border-clover focus:bg-white transition-colors"
-                                value={selectedStickerForNote}
-                                onChange={(e) => setSelectedStickerForNote(e.target.value)}
-                            >
-                                {ALL_STICKERS
-                                    .filter(s => unlockedStickers.includes(s.id))
-                                    .map(s => (
-                                        <option key={s.id} value={s.emoji}>
-                                            {s.emoji} {s.name}
-                                        </option>
-                                    ))}
-                            </select>
-
-                            <button type="submit" className="w-full py-3 rounded-full bg-clover text-white font-hero text-2xl border-0 cursor-pointer shadow-botanical hover:bg-clover-dark hover:-translate-y-0.5 transition-all">
-                                Save to Journal
-                            </button>
-                        </form>
-
-                        {/* List */}
-                        <div className="flex flex-col gap-4">
-                            {notes.map((note) => (
-                                <div key={note.id} className="bg-white/90 backdrop-blur-sm rounded-[22px] p-5 px-6 border-[1.5px] border-white/90 shadow-sm">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="font-hero text-2xl text-forest">
-                                            {note.stickerEmoji} {note.title}
-                                        </h3>
-                                        <span className="text-xs text-forest/60 font-semibold">{note.date}</span>
-                                    </div>
-                                    <p className="font-quote text-2xl leading-snug text-forest/90">{note.text}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );

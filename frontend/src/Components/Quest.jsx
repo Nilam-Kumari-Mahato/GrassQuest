@@ -11,9 +11,38 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
     const [mood, setMood] = useState('')
     const [duration, setDuration] = useState('');
     const [selectedInterests, setSelectedInterest] = useState([]);
-    const [customInterest, setCustomInterest] = useState([])
     const [environment, setEnvironment] = useState('');
+    const [quest, setQuest] = useState('');
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
 
+    const handleGenerateQUest = async () => {
+        setLoading(true);
+        setError('');
+        try {
+            const res = await fetch("", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    mood,
+                    duration,
+                    selectedInterests,
+                    environment
+                })
+            });
+            const result = res.json();
+            if (!res.ok || !result.success) {
+                throw new Error(result.error || result.errors?.join(', ') || 'Could not generate a Quest.')
+            }
+
+            setQuest(result.data);
+        } catch (err) {
+            setError(err ? err.messag : 'Could not able to connect to the GrassQuest of backend');
+        }
+        finally {
+            setLoading(false);
+        }
+    }
 
     const toggleInterest = (id) => {
         setSelectedInterest((prev) => {
@@ -29,7 +58,15 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
         });
     }
 
-
+    if (quest) {
+        return (
+            <section>
+                <div>
+                    Your Quest !!
+                </div>
+            </section>
+        );
+    }
     return (
         <div
             className="page-view-container"
@@ -167,7 +204,7 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
                                         type="button"
                                         onClick={() => toggleInterest(interest.id)}
                                         aria-pressed={isSelected}
-                                        className={`h-20 w-50 flex items-center gap-3 rounded-2xl border p-2 text-left transition-all duration-200 ${isSelected
+                                        className={`h-18 w-50 flex items-center gap-3 rounded-2xl border p-2 text-left transition-all duration-200 ${isSelected
                                             ? "border-green-700 bg-lime-100 shadow-sm"
                                             : "border-green-100 bg-[#FFFDF7] hover:border-green-400"
                                             }`}
@@ -250,6 +287,13 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
                             })}
                         </div>
                     </section>
+
+
+                    <div className='flex justify-center items-center'
+                        onClick={handleGenerateQUest}
+                    >
+                        <button className='h-15 w-30 px-4 py-2 mt-4 mb-4  flex justify-center items-center text-2xl text-[#FFFDF7] font-hero font-[#FFFDF7] rounded-2xl bg-[#315C3A]  transition-all duration-300 ease-in-out hover:scale-105 active:translate-y-0 hover:shadow-[0_6px_0_0_#1D4026,0_10px_18px_-6px_rgba(36,75,43,0.4)]'>Generate Quest</button>
+                    </div>
 
                 </div>
             </div>
