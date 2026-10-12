@@ -6,6 +6,7 @@ import { interests } from '../data/interests';
 import { environments } from '../data/environments';
 import { stickers } from '../data/stickers';
 
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
 
 function ErrorPopup({ message, onDismiss }) {
@@ -46,7 +47,7 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
         setError('');
         setCompletionResult(null);
         try {
-            const res = await fetch("/api/quests/generate", {
+            const res = await fetch(`${API_BASE_URL}/api/quests/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -97,43 +98,43 @@ export default function Quest({ onNavigate, completedQuests = [], onCompleteQues
             : null);
         return (
             <>
-            <section className="min-h-screen w-full px-3 pt-24 pb-10 sm:px-5 sm:pt-28 sm:pb-16 bg-cover bg-bottom">
-                <div className="mx-auto max-w-3xl rounded-3xl border border-white/80 bg-[#FFFDF7]/95 p-4 shadow-xl sm:p-8 lg:p-10">
-                    <div className="mb-6 flex items-center gap-3 text-green-800">
-                        <Sparkles size={26} className="shrink-0" />
-                        <h1 className="font-hero text-2xl font-extrabold text-[#2b4b24] sm:text-3xl">Your Nature Quest</h1>
-                    </div>
-                    <h2 className="mb-3 text-2xl font-bold text-green-950">{quest.title}</h2>
-                    <p className="mb-6 text-lg leading-7 text-green-900">{quest.description}</p>
-                    <div className="mb-5 flex flex-wrap gap-3 text-sm font-semibold text-green-800">
-                        <span className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2"><Clock size={16} />{quest.duration} minutes</span>
-                        <span className="rounded-full bg-green-100 px-4 py-2">{environments.find((item) => item.id === quest.environment)?.label || quest.environment}</span>
-                    </div>
-                    <ol className="mb-6 list-decimal space-y-3 pl-6 text-green-950">
-                        {quest.instructions.map((instruction, index) => <li key={index} className="pl-1 leading-6">{instruction}</li>)}
-                    </ol>
-                    <p className="mb-7 rounded-2xl bg-lime-100 p-4 font-medium text-green-900">{quest.completionMessage}</p>
-                    {completionResult && (
-                        <div role="status" className="mb-6 flex items-center gap-4 rounded-2xl border border-green-200 bg-green-50 p-4 text-green-900">
-                            {awardedSticker ? <img src={awardedSticker.img} alt="" className="h-16 w-16 rounded-xl object-contain" /> : <Award size={32} />}
-                            <div>
-                                <p className="font-bold">{completionResult.alreadyCompleted ? 'This quest is already in your journal.' : awardedSticker ? `You earned ${awardedSticker.label}!` : 'Quest saved to your journal!'} </p>
-                                <p className="text-sm">{awardedSticker ? 'Your new sticker is waiting in the Journal.' : 'You have collected all 10 stickers. Keep exploring!'}</p>
-                            </div>
+                <section className="min-h-screen w-full px-3 pt-24 pb-10 sm:px-5 sm:pt-28 sm:pb-16 bg-cover bg-bottom">
+                    <div className="mx-auto max-w-3xl rounded-3xl border border-white/80 bg-[#FFFDF7]/95 p-4 shadow-xl sm:p-8 lg:p-10">
+                        <div className="mb-6 flex items-center gap-3 text-green-800">
+                            <Sparkles size={26} className="shrink-0" />
+                            <h1 className="font-hero text-2xl font-extrabold text-[#2b4b24] sm:text-3xl">Your Nature Quest</h1>
                         </div>
-                    )}
-                    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                        <button type="button" disabled={alreadyCompleted || loading} onClick={() => setCompletionResult(onCompleteQuest?.(quest) || { alreadyCompleted: false, sticker: null })} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#315C3A] px-4 py-3 font-semibold text-white hover:bg-green-800 disabled:cursor-default disabled:opacity-70 sm:px-5">
-                            {alreadyCompleted || completionResult ? <CheckCircle2 size={18} /> : <Award size={18} />}
-                            {alreadyCompleted || completionResult ? 'Quest completed' : 'I completed this quest'}
-                        </button>
-                        <button type="button" onClick={() => { setQuest(''); onQuestChange?.(null); setCompletionResult(null); }} className="rounded-2xl border border-green-700 px-4 py-3 font-semibold text-green-800 sm:px-5">Create another quest</button>
-                        <button type="button" onClick={handleGenerateQUest} disabled={loading} className="rounded-2xl border border-green-700 px-4 py-3 font-semibold text-green-800 disabled:opacity-60 sm:px-5">{loading ? 'Generating…' : 'Try another quest with these choices'}</button>
-                        <button type="button" onClick={() => onNavigate('home')} className="rounded-2xl border border-green-200 px-4 py-3 font-semibold text-green-800 sm:px-5">Back to home</button>
+                        <h2 className="mb-3 text-2xl font-bold text-green-950">{quest.title}</h2>
+                        <p className="mb-6 text-lg leading-7 text-green-900">{quest.description}</p>
+                        <div className="mb-5 flex flex-wrap gap-3 text-sm font-semibold text-green-800">
+                            <span className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2"><Clock size={16} />{quest.duration} minutes</span>
+                            <span className="rounded-full bg-green-100 px-4 py-2">{environments.find((item) => item.id === quest.environment)?.label || quest.environment}</span>
+                        </div>
+                        <ol className="mb-6 list-decimal space-y-3 pl-6 text-green-950">
+                            {quest.instructions.map((instruction, index) => <li key={index} className="pl-1 leading-6">{instruction}</li>)}
+                        </ol>
+                        <p className="mb-7 rounded-2xl bg-lime-100 p-4 font-medium text-green-900">{quest.completionMessage}</p>
+                        {completionResult && (
+                            <div role="status" className="mb-6 flex items-center gap-4 rounded-2xl border border-green-200 bg-green-50 p-4 text-green-900">
+                                {awardedSticker ? <img src={awardedSticker.img} alt="" className="h-16 w-16 rounded-xl object-contain" /> : <Award size={32} />}
+                                <div>
+                                    <p className="font-bold">{completionResult.alreadyCompleted ? 'This quest is already in your journal.' : awardedSticker ? `You earned ${awardedSticker.label}!` : 'Quest saved to your journal!'} </p>
+                                    <p className="text-sm">{awardedSticker ? 'Your new sticker is waiting in the Journal.' : 'You have collected all 10 stickers. Keep exploring!'}</p>
+                                </div>
+                            </div>
+                        )}
+                        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                            <button type="button" disabled={alreadyCompleted || loading} onClick={() => setCompletionResult(onCompleteQuest?.(quest) || { alreadyCompleted: false, sticker: null })} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#315C3A] px-4 py-3 font-semibold text-white hover:bg-green-800 disabled:cursor-default disabled:opacity-70 sm:px-5">
+                                {alreadyCompleted || completionResult ? <CheckCircle2 size={18} /> : <Award size={18} />}
+                                {alreadyCompleted || completionResult ? 'Quest completed' : 'I completed this quest'}
+                            </button>
+                            <button type="button" onClick={() => { setQuest(''); onQuestChange?.(null); setCompletionResult(null); }} className="rounded-2xl border border-green-700 px-4 py-3 font-semibold text-green-800 sm:px-5">Create another quest</button>
+                            <button type="button" onClick={handleGenerateQUest} disabled={loading} className="rounded-2xl border border-green-700 px-4 py-3 font-semibold text-green-800 disabled:opacity-60 sm:px-5">{loading ? 'Generating…' : 'Try another quest with these choices'}</button>
+                            <button type="button" onClick={() => onNavigate('home')} className="rounded-2xl border border-green-200 px-4 py-3 font-semibold text-green-800 sm:px-5">Back to home</button>
+                        </div>
                     </div>
-                </div>
-            </section>
-            <ErrorPopup message={error} onDismiss={() => setError('')} />
+                </section>
+                <ErrorPopup message={error} onDismiss={() => setError('')} />
             </>
         );
     }
